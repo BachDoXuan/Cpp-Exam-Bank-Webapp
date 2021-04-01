@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block title %} Input a Cpp question {% endblock %}
+{% block content %}
+
+<form method="post" id="exam_question">
+  {% csrf_token %}
+  <div id="question">
+    <h3>Question input</h3>
+    <div>
+      <h4>Question type</h4>
+      <div>
+        <input type="radio" name="type" id="theory" value="theory" required />
+        <label for="theory">Theory</label>
+        <br />
+        <input type="radio" name="type" id="pratice" value="pratice" />
+        <label for="pratice">Pratice</label>
+      </div>
+    </div>
+
+    <div>
+      <h4>Question level</h4>
+      <div>
+        <input type="radio" name="level" id="hard" value="hard" required />
+        <label for="hard">Hard</label>
+        <br />
+        <input type="radio" name="level" id="medium" value="medium" />
+        <label for="medium">Medium</label>
+        <br />
+        <input type="radio" name="level" id="easy" value="easy" />
+        <label for="easy">Easy</label>
+      </div>
+    </div>
+
+    <div>
+      <h4>Question content</h4>
+      <div>
+        <label for="content">Question?</label>
+        <br />
+        <textarea id="content" name="content" rows="10" cols="50">
+        </textarea>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button id="submit" type="submit">Submit question</button>
+  </div>
+</form>
+{% endblock %}

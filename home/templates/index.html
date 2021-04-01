@@ -4,5 +4,16 @@ Web app to generate C++ exam easily
 {% endblock %}
 
 {% block content %}
-Home page
+<div class="container">
+    <h2>Home page</h2>
+
+    <a href = "{% url 'input_question' %}">
+        <button type="button" class="btn mt-2 btn-custom rounded-pill btn-block">
+            Input a cpp question
+        </button>
+    </a>
+
+
+</div>
+
 {% endblock %}
