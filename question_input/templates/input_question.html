@@ -1,48 +1,84 @@
-{% extends 'base.html' %} {% block title %} Input a Cpp question {% endblock %}
-{% block content %}
+<html5>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-<form method="post" id="exam_question">
-  {% csrf_token %}
-  <div id="question">
-    <h3>Question input</h3>
-    <div>
-      <h4>Question type</h4>
-      <div>
-        <input type="radio" name="type" id="theory" value="theory" required />
-        <label for="theory">Theory</label>
-        <br />
-        <input type="radio" name="type" id="pratice" value="pratice" />
-        <label for="pratice">Pratice</label>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Input C++ question</title>
+    {% load static %}
+
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+    />
+  </head>
+
+  <body>
+    <form method="post" id="exam_question">
+      {% csrf_token %}
+      <div class="container">
+        <div id="question" class="container">
+          <div>
+            <h4>Question type</h4>
+            <div>
+              <input type="radio" name="question_type" id="theory" value="TH" required />
+              <label for="theory">Theory</label>
+              <br />
+              <input type="radio" name="question_type" id="pratice" value="PR" />
+              <label for="pratice">Pratice</label>
+            </div>
+          </div>
+
+          <div>
+            <h4>Question level</h4>
+            <div>
+              <input type="radio" name="question_level" id="hard" value="H" required />
+              <label for="hard">Hard</label>
+              <br />
+              <input type="radio" name="question_level" id="medium" value="M" />
+              <label for="medium">Medium</label>
+              <br />
+              <input type="radio" name="question_level" id="easy" value="E" />
+              <label for="easy">Easy</label>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <label for="content"><h4>Question?</h4></label>
+              <br />
+              <textarea id="content" name="question_content" rows="10" cols="100">
+              </textarea>
+            </div>
+          </div>
+          <div>
+            <label for="answer"><h4>Answer</h4></label>
+            <br />
+            <div>
+              <textarea
+                name="question_answer"
+                id="answer"
+                cols="100"
+                rows="10"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <br />
+          <button class="btn btn-secondary btn-lg" id="submit" type="submit">
+            Submit
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
 
-    <div>
-      <h4>Question level</h4>
-      <div>
-        <input type="radio" name="level" id="hard" value="hard" required />
-        <label for="hard">Hard</label>
-        <br />
-        <input type="radio" name="level" id="medium" value="medium" />
-        <label for="medium">Medium</label>
-        <br />
-        <input type="radio" name="level" id="easy" value="easy" />
-        <label for="easy">Easy</label>
-      </div>
-    </div>
-
-    <div>
-      <h4>Question content</h4>
-      <div>
-        <label for="content">Question?</label>
-        <br />
-        <textarea id="content" name="content" rows="10" cols="50">
-        </textarea>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <button id="submit" type="submit">Submit question</button>
-  </div>
-</form>
-{% endblock %}
+    <script src="{% static 'bootstrap/js/jquery-3.5.1.slim.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html5>

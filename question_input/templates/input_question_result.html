@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block title %} Input question result {% endblock %}
+{% block content %}
+    {% if is_success %}
+        Input question succeeds. Thank you for your contribution.
+        Have a nice day :)
+    {% else %}
+        Your submission is not valid. Please check it again. Thank you for taking your time.
+    {% endif %}
+{% endblock %}
