@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 
 class CppQuestion(models.Model):
     # user info
-    # user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     # creation date
     question_creation_date = models.DateTimeField(auto_now_add=True)
 
     # valid or not
-    is_valid = models.BooleanField(default=False)
+    is_valid = models.BooleanField(default=False, help_text="Verify this question's validity")
 
     # question type
     THEORY = 'TH'
@@ -51,3 +51,6 @@ class CppQuestion(models.Model):
         max_length=1000,
         help_text="Enter your question answer."
     )
+
+    def __str__(self):
+        return self.question_content[:50]

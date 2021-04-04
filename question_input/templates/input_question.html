@@ -20,59 +20,89 @@
     <form method="post" id="exam_question">
       {% csrf_token %}
       <div class="container">
-        <div id="question" class="container">
-          <div>
-            <h4>Question type</h4>
-            <div>
-              <input type="radio" name="question_type" id="theory" value="TH" required />
-              <label for="theory">Theory</label>
-              <br />
-              <input type="radio" name="question_type" id="pratice" value="PR" />
-              <label for="pratice">Pratice</label>
+        <div class="panel panel-info">
+          <div id="question" class="container">
+            <div style="margin-bottom: 25px" class="form-group">
+              <!-- <span class="input-group-addon">
+                  <em class="glyphicon glyphicon-user"></em>
+                </span> -->
+              <h4>Question type</h4>
+              <div>
+                <input
+                  type="radio"
+                  name="question_type"
+                  id="theory"
+                  value="TH"
+                  required
+                />
+                <label for="theory">Theory</label>
+                <br />
+                <input
+                  type="radio"
+                  name="question_type"
+                  id="pratice"
+                  value="PR"
+                />
+                <label for="pratice">Pratice</label>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <h4>Question level</h4>
-            <div>
-              <input type="radio" name="question_level" id="hard" value="H" required />
-              <label for="hard">Hard</label>
-              <br />
-              <input type="radio" name="question_level" id="medium" value="M" />
-              <label for="medium">Medium</label>
-              <br />
-              <input type="radio" name="question_level" id="easy" value="E" />
-              <label for="easy">Easy</label>
+            <div style="margin-bottom: 25px" class="form-group">
+              <h4>Question level</h4>
+              <div>
+                <input
+                  type="radio"
+                  name="question_level"
+                  id="hard"
+                  value="H"
+                  required
+                />
+                <label for="hard">Hard</label>
+                <br />
+                <input
+                  type="radio"
+                  name="question_level"
+                  id="medium"
+                  value="M"
+                />
+                <label for="medium">Medium</label>
+                <br />
+                <input type="radio" name="question_level" id="easy" value="E" />
+                <label for="easy">Easy</label>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <div>
+            <div style="margin-bottom: 25px" class="form-group">
               <label for="content"><h4>Question?</h4></label>
               <br />
-              <textarea id="content" name="question_content" rows="10" cols="100">
+              <textarea
+                id="content"
+                name="question_content"
+                class="form-control"
+                rows="10"
+              >
               </textarea>
             </div>
-          </div>
-          <div>
-            <label for="answer"><h4>Answer</h4></label>
-            <br />
-            <div>
-              <textarea
-                name="question_answer"
-                id="answer"
-                cols="100"
-                rows="10"
-              ></textarea>
+            <div style="margin-bottom: 25px" class="form-group">
+              <label for="answer"><h4>Answer</h4></label>
+              <br />
+              <div>
+                <textarea
+                  class="form-control"
+                  name="question_answer"
+                  id="answer"
+                  rows="10"
+                ></textarea>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <br />
-          <button class="btn btn-secondary btn-lg" id="submit" type="submit">
-            Submit
-          </button>
+          <div>
+            <br />
+            <button class="btn btn-secondary" id="submit" type="submit">
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </form>

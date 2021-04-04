@@ -3,3 +3,7 @@ home/__pycache__/*
 question_input/__pycache__/*
 question_input/migrations/__pycache__/*
 home/migrations/__pycache__/
+question_input/migrations/*
+account_management/migrations/*
+account_management/__pycache__/*
+db.sqlite3

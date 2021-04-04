@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'question_input'
+    'question_input',
+    'account_management'
 ]
 
 MIDDLEWARE = [
