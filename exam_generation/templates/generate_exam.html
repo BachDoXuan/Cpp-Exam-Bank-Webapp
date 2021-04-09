@@ -1,0 +1,50 @@
+<html5>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Generate exams</title>
+    {% load static %}
+
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+    />
+  </head>
+
+  <body>
+    <form method="post" id="exam_question">
+      {% csrf_token %}
+      <div class="container">
+        <div class="panel panel-info">
+          <div style="margin-bottom: 25px; margin-top: 25px">
+            <label for="num_exams"
+              >Enter the number of exams you want to produce:</label
+            >
+
+            <br />
+            <input
+              name="num_exams"
+              id="num_exams"
+              type="number"
+              placeholder="number of exams"
+            />
+          </div>
+          <div>
+            <br />
+            <button class="btn btn-secondary" id="submit" type="submit">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <script src="{% static 'bootstrap/js/jquery-3.5.1.slim.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html5>

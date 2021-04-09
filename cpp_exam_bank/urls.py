@@ -51,5 +51,5 @@ urlpatterns += [
 from exam_generation import views as exam_generation_views
 
 urlpatterns += [
-    path('generate_exam', acccount_management_views.signin, name='generate_exam')
+    path('generate_exam', exam_generation_views.generate_exam, name='generate_exam')
 ]

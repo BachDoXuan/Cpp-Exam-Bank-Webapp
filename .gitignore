@@ -7,3 +7,4 @@ question_input/migrations/*
 account_management/migrations/*
 account_management/__pycache__/*
 db.sqlite3
+.vscode/*
