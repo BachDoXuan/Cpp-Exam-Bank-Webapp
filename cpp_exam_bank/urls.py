@@ -26,9 +26,11 @@ from django.conf.urls import include
 
 # home app
 from home import views as home_views
+from account_management import views as acccount_management_views
+from exam_generation import views as exam_generation_views
 
 urlpatterns += [
-    path('', home_views.index, name='index'),
+    path('', exam_generation_views.generate_exam, name='generate_exam'),
 ]
 
 # question input app
@@ -40,16 +42,12 @@ urlpatterns += [
 
 
 # account management app
-from account_management import views as acccount_management_views
-
 urlpatterns += [
     path('signin', acccount_management_views.signin, name='signin'),
     path('signup', acccount_management_views.signup, name='signup')
 ]
 
 # exam generation app
-from exam_generation import views as exam_generation_views
-
 urlpatterns += [
     path('generate_exam', exam_generation_views.generate_exam, name='generate_exam')
 ]
