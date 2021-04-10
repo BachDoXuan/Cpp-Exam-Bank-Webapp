@@ -49,5 +49,6 @@ urlpatterns += [
 
 # exam generation app
 urlpatterns += [
-    path('generate_exam', exam_generation_views.generate_exam, name='generate_exam')
+    path('generate_exam', exam_generation_views.generate_exam, name='generate_exam'),
+    path('csv_backup', exam_generation_views.backup_to_csv, name='backup_to_csv')
 ]

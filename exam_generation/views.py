@@ -1,34 +1,24 @@
 # Create your views here.
 from question_input.models import EasyPracticeCppQuestion, EasyTheoryCppQuestion, MediumPracticeCppQuestion, MediumTheoryCppQuestion, HardPracticeCppQuestion, HardTheoryCppQuestion
 
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus.paragraph import Paragraph
-from reportlab.platypus.flowables import PageBreak, Spacer
-from reportlab.lib.units import mm
-from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, SimpleDocTemplate
-from reportlab.lib.pagesizes import A4
+
 from .forms import ExamRequestForm
-import reportlab.rl_config
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus.tables import Table
-from reportlab.platypus.tables import TableStyle
-from reportlab.lib import colors
+
 from zipfile import ZipFile
 import random
 import io
 import logging
 import os
 import shutil
+# import csv
 
 logging.basicConfig(filename='exam_generation/log/exam_generation.log',
                     encoding='utf-8', level=logging.DEBUG)
 
-from .utils.utils import build_exam
+from .utils.pdf_utils import build_exam
+from .utils.csv_utils import generate_csv_backup
 
 def generate_exam(request):
     if request.method == 'POST':
@@ -66,3 +56,16 @@ def generate_exam(request):
 
     request_form = ExamRequestForm()
     return render(request, "generate_exam.html", {'request_form': request_form})
+
+
+def backup_to_csv(request):
+    """
+    Back up all questions in database to csv file.
+    """
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="questions.csv"'
+
+    generate_csv_backup(response)
+    
+    return response
