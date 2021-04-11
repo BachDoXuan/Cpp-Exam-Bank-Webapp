@@ -52,3 +52,10 @@ class CppQuestionForm(forms.Form):
             'min_length': 'At least 1 characters'
         }
     )
+
+
+class CSVUploadFileForm(forms.Form):
+    """
+    to receive, validate, and clean uploaded csv file
+    """
+    csv_file = forms.FileField()

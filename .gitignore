@@ -12,3 +12,5 @@ exam_generation/__pycache__/views.cpython-36.pyc
 exam_generation/log/*
 exam_generation/response/*
 exam_generation/utils/__pycache__/*
+question_input/uploaded/*
+question_input/utils/__pycache__/*

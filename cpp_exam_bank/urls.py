@@ -37,7 +37,8 @@ urlpatterns += [
 from question_input import views as question_input_views
 
 urlpatterns += [
-    path('input_question', question_input_views.input_question, name='input_question')
+    path('input_question', question_input_views.input_question, name='input_question'),
+    path('upload_csv', question_input_views.upload_csv, name='upload_csv')
 ]
 
 

@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 from .models import CppQuestion, EasyPracticeCppQuestion, EasyTheoryCppQuestion, MediumPracticeCppQuestion, MediumTheoryCppQuestion, HardPracticeCppQuestion, HardTheoryCppQuestion
-from .forms import CppQuestionForm
+from .forms import CppQuestionForm, CSVUploadFileForm
 
+from .utils.csv_upload_utils import handle_uploaded_csv_file
 
 def input_question(request):
     if request.method == 'POST':
@@ -51,3 +52,16 @@ def input_question(request):
 
     question_form = CppQuestionForm()
     return render(request, "input_question.html", {'question_form': question_form})
+
+
+def upload_csv(request):
+    """
+    """
+    if request.method == 'POST':
+        form = CSVUploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_csv_file(request.FILES['csv_file'])
+    else:
+        form = CSVUploadFileForm()
+
+    return render(request, "csv_upload.html", {'form': form})
