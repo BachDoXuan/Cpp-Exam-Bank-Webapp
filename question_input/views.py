@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 from .models import CppQuestion, EasyPracticeCppQuestion, EasyTheoryCppQuestion, MediumPracticeCppQuestion, MediumTheoryCppQuestion, HardPracticeCppQuestion, HardTheoryCppQuestion
@@ -6,6 +7,7 @@ from .forms import CppQuestionForm, CSVUploadFileForm
 
 from .utils.csv_upload_utils import handle_uploaded_csv_file
 
+@login_required
 def input_question(request):
     if request.method == 'POST':
         # create a form instance and populate it with the request's data
@@ -53,7 +55,7 @@ def input_question(request):
     question_form = CppQuestionForm()
     return render(request, "input_question.html", {'question_form': question_form})
 
-
+@login_required
 def upload_csv(request):
     """
     """

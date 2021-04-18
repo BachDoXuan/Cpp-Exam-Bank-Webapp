@@ -3,6 +3,7 @@ from question_input.models import EasyPracticeCppQuestion, EasyTheoryCppQuestion
 
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .forms import ExamRequestForm
 
@@ -20,6 +21,7 @@ logging.basicConfig(filename='exam_generation/log/exam_generation.log',
 from .utils.pdf_utils import build_exam
 from .utils.csv_utils import generate_csv_backup
 
+@login_required
 def generate_exam(request):
     if request.method == 'POST':
         request_form = ExamRequestForm(request.POST)
@@ -57,7 +59,7 @@ def generate_exam(request):
     request_form = ExamRequestForm()
     return render(request, "generate_exam.html", {'request_form': request_form})
 
-
+@login_required
 def backup_to_csv(request):
     """
     Back up all questions in database to csv file.

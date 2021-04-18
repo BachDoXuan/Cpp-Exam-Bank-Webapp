@@ -30,7 +30,7 @@ from account_management import views as acccount_management_views
 from exam_generation import views as exam_generation_views
 
 urlpatterns += [
-    path('', exam_generation_views.generate_exam, name='generate_exam'),
+    path('', home_views.index, name='index'),
 ]
 
 # question input app
