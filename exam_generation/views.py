@@ -2,7 +2,7 @@
 from question_input.models import EasyPracticeCppQuestion, EasyTheoryCppQuestion, MediumPracticeCppQuestion, MediumTheoryCppQuestion, HardPracticeCppQuestion, HardTheoryCppQuestion
 
 from django.http import FileResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .forms import ExamRequestForm
@@ -23,6 +23,8 @@ from .utils.csv_utils import generate_csv_backup
 
 @login_required
 def generate_exam(request):
+    if not request.user.groups.filter(name = 'Can_generate_exams').exists():
+        return redirect('index')
     if request.method == 'POST':
         request_form = ExamRequestForm(request.POST)
         if not request_form.is_valid():

@@ -6,7 +6,7 @@ home/migrations/__pycache__/
 question_input/migrations/*
 account_management/migrations/*
 account_management/__pycache__/*
-db.sqlite3
+#db.sqlite3
 .vscode/*
 exam_generation/__pycache__/views.cpython-36.pyc
 exam_generation/log/*
