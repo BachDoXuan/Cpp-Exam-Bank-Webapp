@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
@@ -9,6 +9,9 @@ from .utils.csv_upload_utils import handle_uploaded_csv_file
 
 @login_required
 def input_question(request):
+    if not request.user.groups.filter(name = 'Can_input_exams').exists():
+        return redirect('index')
+
     if request.method == 'POST':
         # create a form instance and populate it with the request's data
         # to validate the request's data and transform them to a cleaned format
@@ -59,6 +62,9 @@ def input_question(request):
 def upload_csv(request):
     """
     """
+    if not request.user.groups.filter(name = 'Can_input_exams').exists():
+        return redirect('index')
+        
     if request.method == 'POST':
         form = CSVUploadFileForm(request.POST, request.FILES)
         if form.is_valid():
