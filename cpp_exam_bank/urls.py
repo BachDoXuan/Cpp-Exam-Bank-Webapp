@@ -45,7 +45,8 @@ urlpatterns += [
 # account management app
 urlpatterns += [
     path('signin', acccount_management_views.signin, name='signin'),
-    path('signup', acccount_management_views.signup, name='signup')
+    path('signup', acccount_management_views.signup, name='signup'),
+    path('signout', acccount_management_views.signout, name='signout')
 ]
 
 # exam generation app

@@ -66,7 +66,7 @@ def backup_to_csv(request):
     """
     Back up all questions in database to csv file.
     """
-    if not request.user.groups.filter(name = 'Can_generate_exams').exists():
+    if not request.user.groups.filter(name = 'Can_download_all_questions').exists():
         return redirect('index')
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type="text/csv")

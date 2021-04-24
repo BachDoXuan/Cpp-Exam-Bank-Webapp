@@ -1,16 +1,77 @@
-{% extends 'base.html' %} {% block title %} Web app to generate C++ exam easily
-{% endblock %} {% block content %}
-<div class="container">
-    <h2>Home page</h2>
+{% extends 'base.html' %} {% block title %} C++ entry exams {% endblock %} 
+{% block content %}
+<header class="px-3 py-2 bg-success text-white">
+  <div class="container">
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
+      >
+        <svg class="bi me-2" width="40" height="32">
+          <use xlink:href="#bootstrap" />
+        </svg>
+      </a>
+      <ul
+        class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small"
+      >
+        <li>
+          <a href="{% url 'index' %}" class="nav-link text-secondary"> Home </a>
+        </li>
+        {% if user.is_authenticated %}
+        {% if Can_generate_exams %}
+        <li>
+          <a href="{% url 'generate_exam' %}" class="nav-link text-white">
+            Generate C++ entry exams
+          </a>
+        </li>
+        {% endif %}
+        <li>
+          <a href="{% url 'backup_to_csv' %}" class="nav-link text-white">
+            Download all C++ questions
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'input_question' %}" class="nav-link text-white">
+            Create C++ question
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'upload_csv' %}" class="nav-link text-white">
+            Upload a csv file of C++ questions
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</header>
 
-    <a href = "{% url 'input_question' %}">
-        <button type="button" class="btn btn-secondary btn-lg">
-            Input a cpp question
-        </button>
-    </a>
+<div class="px-3 py-2 border-bottom mb-3">
+  <div class="container d-flex flex-wrap justify-content-center">
+    <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+      <input type="search" class="form-control" placeholder="Search..." />
+    </form>
 
 
+    <div class="text-end">
+        {% if user.is_authenticated %}
+        <button type="button" class="btn btn-light">
+            <a href="{% url 'signout' %}">Logout</a>
+          </button>    
+        {% else %}
+      <button type="button" class="btn btn-light text-dark me-2">
+        <a id="signinlink" href="{% url 'signin' %}">Login</a>
+      </button>
+      <button type="button" class="btn btn-light">
+        <a href="{% url 'signup' %}">Sign-up</a>
+      </button>
+      {% endif %}
+    </div>
+
+  </div>
 </div>
-
+<div class="container"></div>
 
 {% endblock %}

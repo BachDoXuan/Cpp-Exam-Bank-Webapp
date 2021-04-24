@@ -17,15 +17,43 @@
   </head>
 
   <body>
+    <header class="px-3 py-2 bg-dark text-white">
+      <div class="container">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+        >
+          <a
+            href="/"
+            class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
+          >
+            <svg class="bi me-2" width="40" height="32">
+              <use xlink:href="#bootstrap" />
+            </svg>
+          </a>
+    
+          <ul
+            class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small"
+          >
+            <li>
+              <a href="{% url 'index' %}" class="nav-link text-secondary"> Home </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
     <form method="post" id="exam_question">
       {% csrf_token %}
       <div class="container">
         <div class="panel panel-info">
           <div id="question" class="container">
+            <div style="margin-bottom: 25px; margin-top: 25px">
+              {% if return_success %}
+              <h3 style="color: green;">
+                Thank you for your contribution. Have a nice day!
+              </h3>
+              {% endif %}
+            </div>
             <div style="margin-bottom: 25px" class="form-group">
-              <!-- <span class="input-group-addon">
-                  <em class="glyphicon glyphicon-user"></em>
-                </span> -->
               <h4>Question type</h4>
               <div>
                 <input
@@ -73,7 +101,7 @@
             </div>
 
             <div style="margin-bottom: 25px" class="form-group">
-              <label for="content"><h4>Question?</h4></label>
+              <label for="content"><h4>Question</h4></label>
               <br />
               <textarea
                 id="content"

@@ -53,7 +53,7 @@ def input_question(request):
             # save inputted question to database
             question.save()
 
-            return render(request, 'input_question_result.html', {'is_success': True})
+            return render(request, 'input_question.html', {"return_success": True})
 
     question_form = CppQuestionForm()
     return render(request, "input_question.html", {'question_form': question_form})
