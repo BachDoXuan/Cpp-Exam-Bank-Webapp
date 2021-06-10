@@ -7,8 +7,9 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.platypus.flowables import PageBreak, Spacer
 from reportlab.lib.units import mm
-from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, SimpleDocTemplate
+from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate, SimpleDocTemplate, Image
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
 
 import reportlab.rl_config
 from reportlab.pdfbase import pdfmetrics
@@ -77,10 +78,9 @@ class PageNumCanvas(canvas.Canvas):
         """
         Add the page number
         """
-        page = "Page %s of %s" % (self._pageNumber, page_count)
+        text = "Page %s| %s" % (self._pageNumber, page_count)
         self.setFont("Helvetica", 9)
-        self.drawRightString(195*mm, 272*mm, page)
-
+        self.drawRightString(200*mm, 20*mm, text)
 
 def retrieve_exam():
     """
@@ -92,7 +92,9 @@ def retrieve_exam():
 
     logging.debug(
         "Total number of easy theory questions: {}".format(easy_theory_count))
-    th_q1_offset, th_q2_offset = random.sample(range(easy_theory_count), 2)
+    l = list(range(easy_theory_count))
+    random.shuffle(l)
+    th_q1_offset, th_q2_offset = l[0:2]
     th_q1 = EasyTheoryCppQuestion.objects.all()[th_q1_offset]
     th_q2 = EasyTheoryCppQuestion.objects.all()[th_q2_offset]
 
@@ -101,8 +103,9 @@ def retrieve_exam():
 
     logging.debug("Total number of medium theory questions: {}".format(
         medium_theory_count))
-    th_q3_offset, th_q4_offset = random.sample(
-        range(medium_theory_count), 2)
+    l = list(range(medium_theory_count))
+    random.shuffle(l)
+    th_q3_offset, th_q4_offset = l[0:2]
     th_q3 = MediumTheoryCppQuestion.objects.all()[th_q3_offset]
     th_q4 = MediumTheoryCppQuestion.objects.all()[th_q4_offset]
 
@@ -118,8 +121,9 @@ def retrieve_exam():
     logging.debug("Total number of easy practice questions: {}".format(
         easy_practice_count))
     assert easy_practice_count >= 2, "Not enough easy practice questions"
-    pr_q1_offset, pr_q2_offset = random.sample(
-        range(easy_practice_count), 2)
+    l = list(range(easy_practice_count))
+    random.shuffle(l)
+    pr_q1_offset, pr_q2_offset = l[0:2]
     pr_q1 = EasyPracticeCppQuestion.objects.all()[pr_q1_offset]
     pr_q2 = EasyPracticeCppQuestion.objects.all()[pr_q2_offset]
 
@@ -127,8 +131,9 @@ def retrieve_exam():
     logging.debug("Total number of medium practice questions: {}".format(
         medium_practice_count))
     assert medium_practice_count >= 2, "Not enough medium practice questions"
-    pr_q3_offset, pr_q4_offset = random.sample(
-        range(medium_practice_count), 2)
+    l = list(range(medium_practice_count))
+    random.shuffle(l)
+    pr_q3_offset, pr_q4_offset = l[0:2]
     pr_q3 = MediumPracticeCppQuestion.objects.all()[pr_q3_offset]
     pr_q4 = MediumPracticeCppQuestion.objects.all()[pr_q4_offset]
 
@@ -142,13 +147,7 @@ def retrieve_exam():
     return th_q1, th_q2, th_q3, th_q4, th_q5, pr_q1, pr_q2, pr_q3, pr_q4, pr_q5
 
 
-def add_page_number(canvas, doc):
-    """
-    Add the page number
-    """
-    page_num = canvas.getPageNumber()
-    text = "Page #%s" % page_num
-    canvas.drawRightString(200*mm, 20*mm, text)
+
 
 
 BREAK = '<br />'
@@ -178,18 +177,29 @@ def create_exam(idx, exam_tuple):
 
     exam_content = []
 
-    exam_content.append(Paragraph("C++ entry exam " + str(idx + 1), styleSheet['Title']))
-    exam_content.append(Paragraph("Theory", styleSheet['Heading2']))
+    I = Image('exam_generation/static/images/LG logo.jpg')
+    I.drawHeight = 2 * inch * I.drawHeight / I.drawWidth
+    I.drawWidth = 2 * inch
+    exam_content.append(I)
+    exam_content.append(Spacer(0, 5 * mm))
+    exam_content.append(Paragraph("<para align=center><b>ENTRANCE TEST FOR FRESHER SOFTWARE ENGINEER</b></para>", styleSheet['BodyText']))
+    exam_content.append(Paragraph("<para align=center><b>Duration: 30 minutes</b></para>", styleSheet['BodyText']))
+    exam_content.append(Spacer(0, 5 * mm))
+    exam_content.append(Paragraph("<para align=left><b>Full name</b> .................................................</para>", styleSheet['BodyText']))
+    exam_content.append(Paragraph("<para align=left><b>Date of Birth</b> ............................................</para>", styleSheet['BodyText']))
+    exam_content.append(Paragraph("<para align=left><b>Score</b> ......../ <b>100</b>........................................</para>", styleSheet['BodyText']))
+    exam_content.append(Spacer(0, 5 * mm))
+    # exam_content.append(Paragraph("Theory", styleSheet['Heading2']))
     for i in range(5):
-        content = "<b>" + str(i+1) + ")</b>" + BREAK + exam_tuple[i].question_content
+        content = "<b>Question " + str(i+1) + ". </b>" + exam_tuple[i].question_content
         content = content.replace('\n', BREAK)
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
 
     exam_content.append(PageBreak())
-    exam_content.append(Paragraph("Practice", styleSheet['Heading2']))
+    # exam_content.append(Paragraph("Practice", styleSheet['Heading2']))
     for i in range(5, 10):
-        content = "<b>" + str(i+1) + ")</b>" + BREAK + exam_tuple[i].question_content
+        content = "<b>Question " + str(i+1) + ". </b>" + exam_tuple[i].question_content
         content = content.replace('\n', BREAK)
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
