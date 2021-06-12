@@ -196,7 +196,7 @@ def create_exam(idx, exam_tuple):
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
 
-    exam_content.append(PageBreak())
+    # exam_content.append(PageBreak())
     # exam_content.append(Paragraph("Practice", styleSheet['Heading2']))
     for i in range(5, 10):
         content = "<b>Question " + str(i+1) + ". </b>" + exam_tuple[i].question_content
@@ -204,7 +204,7 @@ def create_exam(idx, exam_tuple):
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
 
-    exam_content.append(PageBreak())
+    # exam_content.append(PageBreak())
 
     return exam_content
 
