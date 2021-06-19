@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'home',
     'question_input',
     'account_management',
-    'exam_generation'
+    'exam_generation',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

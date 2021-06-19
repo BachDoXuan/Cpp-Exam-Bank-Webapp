@@ -114,8 +114,7 @@ def retrieve_exam():
 
     logging.debug(
         "Total number of hard theory questions: {}".format(hard_theory_count))
-    th_q5 = HardTheoryCppQuestion.objects.all(
-    )[random.randint(0, hard_theory_count-1)]
+    th_q5 = HardTheoryCppQuestion.objects.all()[random.randint(0, hard_theory_count-1)]
 
     easy_practice_count = EasyPracticeCppQuestion.objects.count()
     logging.debug("Total number of easy practice questions: {}".format(
@@ -141,8 +140,7 @@ def retrieve_exam():
     logging.debug("Total number of hard practice questions: {}".format(
         hard_practice_count))
     assert hard_practice_count >= 1, "Not enough hard practice questions"
-    pr_q5 = HardPracticeCppQuestion.objects.all(
-    )[random.randint(0, hard_practice_count-1)]
+    pr_q5 = HardPracticeCppQuestion.objects.all()[random.randint(0, hard_practice_count-1)]
 
     return th_q1, th_q2, th_q3, th_q4, th_q5, pr_q1, pr_q2, pr_q3, pr_q4, pr_q5
 
@@ -170,7 +168,7 @@ def create_pdfdoc(output, content):
     pdf_doc.build(content, canvasmaker=PageNumCanvas)
 
 
-def create_exam(idx, exam_tuple):
+def create_exam(idx, exam_tuple, is_tuple=True):
     """
     create exam from tuple of 10 questions
     """
@@ -191,16 +189,22 @@ def create_exam(idx, exam_tuple):
     exam_content.append(Spacer(0, 5 * mm))
     # exam_content.append(Paragraph("Theory", styleSheet['Heading2']))
     for i in range(5):
-        content = "<b>Question " + str(i+1) + ". </b>" + exam_tuple[i].question_content
-        content = content.replace('\n', BREAK)
+        if is_tuple:
+            content = "<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple[i].question_content
+            content = content.replace('\n', BREAK)
+        else:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple["q" + str(i+1)]).replace('\n', BREAK)
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
 
     # exam_content.append(PageBreak())
     # exam_content.append(Paragraph("Practice", styleSheet['Heading2']))
     for i in range(5, 10):
-        content = "<b>Question " + str(i+1) + ". </b>" + exam_tuple[i].question_content
-        content = content.replace('\n', BREAK)
+        if is_tuple:
+            content = "<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple[i].question_content
+            content = content.replace('\n', BREAK)
+        else:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple["q" + str(i+1)]).replace('\n', BREAK)
         exam_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_content.append(Spacer(0, 10 * mm))
 
@@ -209,26 +213,39 @@ def create_exam(idx, exam_tuple):
     return exam_content
 
 
-def create_exam_answer(idx, exam_tuple):
+def create_exam_answer(idx, exam_tuple, is_tuple=True):
     """
     create exam answer from exam tuple of 10 questions
     """
     exam_answer_content = []
 
-    exam_answer_content.append(
-        Paragraph("C++ entry exam " + str(idx + 1) + "'s answer", styleSheet['Title']))
-    exam_answer_content.append(
-        Paragraph("Theory answer", styleSheet['Heading2']))
+    I = Image('exam_generation/static/images/LG logo.jpg')
+    I.drawHeight = 2 * inch * I.drawHeight / I.drawWidth
+    I.drawWidth = 2 * inch
+    exam_answer_content.append(I)
+    exam_answer_content.append(Spacer(0, 5 * mm))
+    exam_answer_content.append(Paragraph("<para align=center><b>SOLUTION</b></para>", styleSheet['BodyText']))
+    exam_answer_content.append(Spacer(0, 5 * mm))
+    # exam_answer_content.append(
+    #     Paragraph("C++ entry exam " + str(idx + 1) + "'s answer", styleSheet['Title']))
+    # exam_answer_content.append(
+    #     Paragraph("Theory answer", styleSheet['Heading2']))
     for i in range(5):
-        content = ("<b>" + str(i+1) + ")</b>" + BREAK + exam_tuple[i].question_answer).replace('\n', BREAK)
+        if is_tuple:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple[i].question_answer).replace('\n', BREAK)
+        else:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple["q" + str(i+1) + "_answer"]).replace('\n', BREAK)
         exam_answer_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_answer_content.append(Spacer(0, 10 * mm))
 
-    exam_answer_content.append(PageBreak())
-    exam_answer_content.append(
-        Paragraph("Practice answer", styleSheet['Heading2']))
+    # exam_answer_content.append(PageBreak())
+    # exam_answer_content.append(
+    #     Paragraph("Practice answer", styleSheet['Heading2']))
     for i in range(5, 10):
-        content = ("<b>" + str(i+1) + ")</b>" + BREAK + exam_tuple[i].question_answer).replace('\n', BREAK)
+        if is_tuple:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple[i].question_answer).replace('\n', BREAK)
+        else:
+            content = ("<b>Question " + str(i+1) + ". </b>" + BREAK + exam_tuple["q" + str(i+1) + "_answer"]).replace('\n', BREAK)
         exam_answer_content.append(Paragraph(content, styleSheet['BodyText']))
         exam_answer_content.append(Spacer(0, 10 * mm))
 

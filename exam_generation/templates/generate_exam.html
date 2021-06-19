@@ -1,43 +1,84 @@
 <html5>
+
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Generate exams</title>
     {% load static %}
 
-    <link
-      rel="stylesheet"
-      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+    <style>
+      #exam_preview {
+        display: none;
+      }
+      #previewed_exams {
+        display: none;
+      }
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .question,
+      .question_answer {
+        margin-bottom: 30px;
+      }
+
+      a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 16px;
+      }
+
+      .hover:hover {
+        background-color: #ddd;
+        color: black;
+      }
+
+      .previous {
+        background-color: #f1f1f1;
+        color: black;
+      }
+
+      .next {
+        background-color: #04AA6D;
+        color: white;
+      }
+
+      .round {
+        border-radius: 50%;
+      }
+
+      .download {
+        background-color:green;
+      }
+
+      #exam_idx {
+        background-color: #454241;
+      }
+    </style>
   </head>
 
   <body>
     <header class="px-3 py-2 bg-dark text-white">
       <div class="container">
-        <div
-          class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-        >
-          <a
-            href="/"
-            class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none"
-          >
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32">
               <use xlink:href="#bootstrap" />
             </svg>
           </a>
 
-          <ul
-            class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small"
-          >
+          <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
             <li>
               <a href="{% url 'index' %}" class="nav-link text-secondary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
-                  <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-app"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z" />
                 </svg>
                 Home
               </a>
@@ -46,34 +87,227 @@
         </div>
       </div>
     </header>
-    <form method="post" id="exam_question">
+    <form method="post" onsubmit="return false;" id="generate_exams">
       {% csrf_token %}
       <div class="container">
         <div class="panel panel-info">
           <div style="margin-bottom: 25px; margin-top: 25px">
-            <label for="num_exams"
-              >Enter the number of exams you want to produce:</label
-            >
+            <label for="num_exams">Enter the number of exams you want to produce:</label>
 
             <br />
-            <input
-              name="num_exams"
-              id="num_exams"
-              type="number"
-              placeholder="number of exams"
-            />
+            <input name="num_exams" id="num_exams" type="number" placeholder="number of exams" />
           </div>
           <div>
             <br />
-            <button class="btn btn-secondary" id="submit" type="submit">
-              Submit
+            <button class="btn btn-secondary" onclick="download_exams()">
+              Download
             </button>
+            <button class="btn btn-secondary" onclick="preview_exams()">
+              Preview
+            </button>
+            <br />
           </div>
         </div>
       </div>
+      <input type="hidden" id="choice" name="choice">
+      <textarea type="hidden" id="previewed_exams" name="previewed_exams">[]</textarea>
     </form>
+    <div id="exam_preview">
+      <div style="padding-top: 30px; padding-bottom: 20px;">
+        <a id="exam_idx"></a>
+        <button type="button" class="btn btn-success" onclick="download_preview_exam()">Download this exam</button>
+        <button type="button" class="btn btn-success" onclick="download_all_preview_exams()">Download all exams</button>
+        <button type="button" class="btn previous" onclick="previous()">&laquo; Previous</button>
+        <button type="button" class="btn next" onclick="next()">Next &raquo;</button>
+      </div>
+      <div id="exam" style="margin-bottom: 50px;">
+        <img src="{% static 'images/LG logo.jpg' %}" alt="LG logo" class="center" height=100>
+        <br />
+        <div>
+          <p style="text-align: center; "><strong>ENTRANCE TEST FOR FRESHER SOFTWARE ENGINEER</strong></p>
+          <p style="text-align: center;">Duration: 30 minutes</p>
+        </div>
+        <div style="padding-top: 30; padding-left: 30%;">
+          <p><strong>Full name</strong> ..........................................................</p>
+          <p><strong>Date of birth</strong> ......................................................</p>
+          <p><strong>Score</strong> ........./<strong>100</strong>
+            ................................................</strong></p>
+        </div>
+        <div class="container">
+          <div class="question">
+            <b>Question 1.</b>
+            <p id="q1"> </p>
+          </div>
+          <div class="question">
+            <b>Question 2.</b>
+            <p id="q2"> </p>
+          </div>
+          <div class="question">
+            <b>Question 3.</b>
+            <p id="q3"> </p>
+          </div>
+          <div class="question">
+            <b>Question 4.</b>
+            <p id="q4"> </p>
+          </div>
+          <div class="question">
+            <b>Question 5.</b>
+            <p id="q5"> </p>
+          </div>
+          <div class="question">
+            <b>Question 6.</b>
+            <p id="q6"> </p>
+          </div>
+          <div class="question">
+            <b>Question 7.</b>
+            <p id="q7"> </p>
+          </div>
+          <div class="question">
+            <b>Question 8.</b>
+            <p id="q8"> </p>
+          </div>
+          <div class="question">
+            <b>Question 9.</b>
+            <p id="q9"> </p>
+          </div>
+          <div class="question">
+            <b>Question 10.</b>
+            <p id="q10"> </p>
+          </div>
+        </div>
+      </div>
+      <div id="exam1_solution">
+        <p style="text-align: center; "><b>SOLUTION</b></p>
+
+        <div class="container">
+          <div class="question_answer">
+            <b>Question 1.</b>
+            <p id="q1_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 2.</b>
+            <p id="q2_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 3.</b>
+            <p id="q3_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 4.</b>
+            <p id="q4_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 5.</b>
+            <p id="q5_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 6.</b>
+            <p id="q6_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 7.</b>
+            <p id="q7_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 8.</b>
+            <p id="q8_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 9.</b>
+            <p id="q9_solution"></p>
+          </div>
+          <div class="question_answer">
+            <b>Question 10.</b>
+            <p id="q10_solution"></p>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="{% static 'bootstrap/js/jquery-3.5.1.slim.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/popper.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script>
+      var exam_idx = 0;
+      var exams;
+      function download_exams() {
+        document.getElementById("choice").value = "download";
+        document.getElementById("generate_exams").submit();
+      }
+
+      function preview_exams() {
+        document.getElementById("choice").value = "preview";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/generate_exam");
+        xhr.onload = function (event) {
+          // console.log(event.target.response);
+          exams = JSON.parse(event.target.response);
+          document.getElementById("generate_exams").style.display = "none";
+          display_exam();
+        };
+
+        var formData = new FormData(document.getElementById("generate_exams"));
+        xhr.send(formData);
+        // return false;
+      }
+      function display_exam() {
+        var exam_preview = document.getElementById("exam_preview");
+        exam_preview.style.display = "block";
+        exam = exams[exam_idx];
+        document.getElementById("exam_idx").innerHTML = "Exam " + (exam_idx + 1) + "| " + exams.length;
+        document.getElementById("q1").innerHTML = exam["q1"].replaceAll("\n", "<br>");
+        document.getElementById("q2").innerHTML = exam["q2"].replaceAll("\n", "<br>");
+        document.getElementById("q3").innerHTML = exam["q3"].replaceAll("\n", "<br>");
+        document.getElementById("q4").innerHTML = exam["q4"].replaceAll("\n", "<br>");
+        document.getElementById("q5").innerHTML = exam["q5"].replaceAll("\n", "<br>");
+        document.getElementById("q6").innerHTML = exam["q6"].replaceAll("\n", "<br>");
+        document.getElementById("q7").innerHTML = exam["q7"].replaceAll("\n", "<br>");
+        document.getElementById("q8").innerHTML = exam["q8"].replaceAll("\n", "<br>");
+        document.getElementById("q9").innerHTML = exam["q9"].replaceAll("\n", "<br>");
+        document.getElementById("q10").innerHTML = exam["q10"].replaceAll("\n", "<br>");
+
+        document.getElementById("q1_solution").innerHTML = exam["q1_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q2_solution").innerHTML = exam["q2_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q3_solution").innerHTML = exam["q3_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q4_solution").innerHTML = exam["q4_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q5_solution").innerHTML = exam["q5_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q6_solution").innerHTML = exam["q6_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q7_solution").innerHTML = exam["q7_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q8_solution").innerHTML = exam["q8_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q9_solution").innerHTML = exam["q9_answer"].replaceAll("\n", "<br>");
+        document.getElementById("q10_solution").innerHTML = exam["q10_answer"].replaceAll("\n", "<br>");
+      }
+
+      function previous(){
+        if (exam_idx > 0){
+          exam_idx -= 1;
+          // console.log(exam_idx);
+          display_exam();
+        }
+      }
+      function next(){
+        if (exam_idx < exams.length - 1){
+          exam_idx += 1;
+          // console.log(exam_idx);
+          display_exam();
+        }
+      }
+
+      function download_preview_exam(){
+        // delegate to backend server by sending exam data to server
+        document.getElementById("choice").value = "download_preview";
+        var formData = JSON.stringify([exams[exam_idx],]);
+        document.getElementById("previewed_exams").value = formData;
+        document.getElementById("generate_exams").submit();
+      }
+
+      function download_all_preview_exams(){
+        // delegate to backend server by sending exam data to server
+        document.getElementById("choice").value = "download_preview";
+        var formData = JSON.stringify(exams);
+        document.getElementById("previewed_exams").value = formData;
+        document.getElementById("generate_exams").submit();
+      }
+      
+    </script>
   </body>
 </html5>
