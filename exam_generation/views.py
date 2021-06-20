@@ -16,7 +16,7 @@ import shutil
 import json
 
 logging.basicConfig(filename='exam_generation/log/exam_generation.log',
-                    encoding='utf-8', level=logging.DEBUG)
+                    encoding='utf-8', level=logging.ERROR)
 
 
 @login_required
